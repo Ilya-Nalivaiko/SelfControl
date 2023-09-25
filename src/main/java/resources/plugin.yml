@@ -1,0 +1,20 @@
+name: SelfControl
+version: '1.0'
+main: cat6172.selfcontrol.SelfControl
+description: Kick yourself
+author: Cat6172
+api-version: '1.20'
+
+commands:
+  addtokicklist:
+    description: Add yourself to the list of players kicked next specified time period
+    permission: all
+  kicklist:
+    description: View list of players to be kicked, kick them
+    permission: admin
+    usage: kicklist list to view, kicklist now to kick all
+permissions:
+  all:
+    default: true
+  admin:
+    default: op
