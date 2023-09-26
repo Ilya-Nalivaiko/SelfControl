@@ -7,8 +7,8 @@ public class SelfControl extends JavaPlugin implements CommandExecutor {
     @Override
     public void onEnable() {
         try {
-            getCommand("kicklist").setExecutor(new CommandAdmin());
-            getCommand("addtokicklist").setExecutor(new CommandSelf());
+            getCommand("selfcontrol").setExecutor(new CommandAdmin());
+            getCommand("toggleautokick").setExecutor(new CommandSelf());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

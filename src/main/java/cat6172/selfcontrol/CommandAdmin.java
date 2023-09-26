@@ -10,18 +10,19 @@ import org.jetbrains.annotations.NotNull;
 public class CommandAdmin implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (args.length != 0) {
+        if (args.length != 1) {
             return false;
         }
         if (args[0].equals("list")){
             if (Storage.playersToKick.isEmpty()){
                 sender.sendMessage(Component.text("no players on list"));
+                return true;
             }
             StringBuilder temp = new StringBuilder();
             for (String name : Storage.playersToKick){
                 temp.append(", ").append(name);
             }
-            temp.deleteCharAt(0).deleteCharAt(1);
+            temp.deleteCharAt(0).deleteCharAt(0);
             sender.sendMessage(Component.text(temp.toString()));
             return true;
         } else if (args[0].equals("now")){
@@ -29,6 +30,7 @@ public class CommandAdmin implements CommandExecutor {
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "kick "+name);
             }
             Storage.playersToKick.clear();
+            return true;
         }
         return false;
     }

@@ -6,15 +6,17 @@ author: Cat6172
 api-version: '1.20'
 
 commands:
-  addtokicklist:
+  toggleautokick:
     description: Add yourself to the list of players kicked next specified time period
-    permission: all
-  kicklist:
+    permission: selfcontrol.all
+  selfcontrol:
     description: View list of players to be kicked, kick them
-    permission: admin
-    usage: kicklist list to view, kicklist now to kick all
+    permission: selfcontrol.admin
+    usage: arguments are "list" to see players signed up and "now" to execute
 permissions:
-  all:
-    default: true
-  admin:
+  selfcontrol.admin:
+    description: view and execute kick/tempban list
     default: op
+  selfcontrol.self:
+    description: add self to list of next kick/tempban
+    default: false
