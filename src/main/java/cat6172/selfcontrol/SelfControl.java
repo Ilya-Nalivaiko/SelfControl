@@ -9,6 +9,7 @@ public class SelfControl extends JavaPlugin implements CommandExecutor {
         try {
             getCommand("selfcontrol").setExecutor(new CommandAdmin());
             getCommand("toggleautokick").setExecutor(new CommandSelf());
+            getCommand("toggleautotempban").setExecutor(new CommandSelf());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

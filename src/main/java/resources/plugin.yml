@@ -9,6 +9,9 @@ commands:
   toggleautokick:
     description: Add yourself to the list of players kicked next specified time period
     permission: selfcontrol.all
+  toggleautotempban:
+    description: Add yourself to the list of players temp banned next specified time period
+    permission: selfcontrol.all
   selfcontrol:
     description: View list of players to be kicked, kick them
     permission: selfcontrol.admin

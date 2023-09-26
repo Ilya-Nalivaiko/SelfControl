@@ -7,17 +7,25 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Set;
+
 public class CommandSelf implements CommandExecutor {
     @Override
+
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player){
             String name = sender.getName();
-            if (Storage.playersToKick.contains(name)){
-                Storage.playersToKick.remove(name);
-                sender.sendMessage(Component.text("You have been removed from the list of players to be kicked"));
+
+            Set<String> list;
+            if (label.equals("toggleautokick")) list = Storage.playersToKick;
+            else list = Storage.getPlayersToTempBan;
+
+            if (list.contains(name)){
+                list.remove(name);
+                sender.sendMessage(Component.text("You have been removed from the list"));
             } else {
-                Storage.playersToKick.add(name);
-                sender.sendMessage(Component.text("You have been added to the list of players to be kicked"));
+                list.add(name);
+                sender.sendMessage(Component.text("You have been added to the list"));
             }
         } else {
             sender.sendMessage(Component.text("Command intended to be used by players only"));
