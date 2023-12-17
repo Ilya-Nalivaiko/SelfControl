@@ -48,15 +48,17 @@ public class KickSchedule {
 
         BukkitTask newTask;
 
+        String name = player.getName();
+
         if (ban) newTask = scheduler.runTaskLater(SelfControl.getPlugin(SelfControl.class), () -> {
-            Bukkit.getLogger().info("Executing tempban of " + player.name() + " scheduled on " + currentDateTime + "(" + delaySeconds + " seconds ago)");
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "/tempban " + player.name() + " 1h");
-            scheduledTasks.remove(player.name().toString());
+            Bukkit.getLogger().info("Executing tempban of " + player.name().toString() + " scheduled on " + currentDateTime + "(" + delaySeconds + " seconds ago)");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tempban " + name + " 1h");
+            scheduledTasks.remove(name);
         }, delaySeconds * 20);
         else newTask = scheduler.runTaskLater(SelfControl.getPlugin(SelfControl.class), () -> {
-            Bukkit.getLogger().info("Executing kick of " + player.name() + " scheduled on " + currentDateTime + "(" + delaySeconds + " seconds ago)");
+            Bukkit.getLogger().info("Executing kick of " + name + " scheduled on " + currentDateTime + "(" + delaySeconds + " seconds ago)");
             player.kick();
-            scheduledTasks.remove(player.name().toString());
+            scheduledTasks.remove(name);
         }, delaySeconds * 20);
 
         Bukkit.getLogger().info("Task scheduled at " + currentDateTime + " to be executed at " + givenLocalDateTime + " (in " + delaySeconds + " seconds)");
