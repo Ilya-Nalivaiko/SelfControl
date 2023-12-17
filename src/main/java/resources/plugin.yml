@@ -6,20 +6,22 @@ author: Cat6172
 api-version: '1.20'
 
 commands:
-  toggleautokick:
-    description: Add yourself to the list of players kicked next specified time period
+  autokick:
+    description: Add/remove yourself to the list of players kicked next specified time period
     permission: selfcontrol.all
-  toggleautotempban:
-    description: Add yourself to the list of players temp banned next specified time period
+    usage: /autokick set [time, ie 1:34pm] or /autokick remove
+  autoban:
+    description: Add/remove yourself to the list of players temp banned next specified time period
     permission: selfcontrol.all
+    usage: /autoban set [time, ie 1:34pm] or /autoban remove
   selfcontrol:
-    description: View list of players to be kicked, kick them
+    description: View list of players to be kicked or temp banned
     permission: selfcontrol.admin
-    usage: arguments are "list" to see players signed up and "now" to execute
+    usage: arguments are "list" to see players signed up
 permissions:
   selfcontrol.admin:
-    description: view and execute kick/tempban list
+    description: view kick/tempban list
     default: op
   selfcontrol.self:
-    description: add self to list of next kick/tempban
+    description: add self to auto kick/tempban
     default: false
