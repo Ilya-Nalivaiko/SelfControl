@@ -8,13 +8,16 @@ api-version: '1.20'
 commands:
   kickme:
     description: Add/remove yourself to the list of players kicked at specified time
-    permission: selfcontrol.self
+    permission: selfcontrol.kick
     usage: /kickme at [time, ie 1:34pm] (to add) or /kickme r (to remove)
   banme:
     description: Add/remove yourself to the list of players temp banned (1 hour) at specified time
-    permission: selfcontrol.self
+    permission: selfcontrol.ban
     usage: /banme set [time, ie 1:34pm] or /banme r (to remove)
 permissions:
-  selfcontrol.self:
-    description: add self to auto kick/tempban
+  selfcontrol.kick:
+    description: add self to auto kick list
+    default: true
+  selfcontrol.ban:
+    description: add self to temp ban list
     default: false

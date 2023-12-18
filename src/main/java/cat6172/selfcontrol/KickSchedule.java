@@ -41,19 +41,26 @@ public class KickSchedule {
     }
 
     public static void addInstance(Player player, String givenTime, boolean ban) {
-        // Get current and given time
-        LocalTime givenLocalTime = LocalTime.parse(givenTime.toUpperCase(), formatter);
-        ZonedDateTime currentDateTime = ZonedDateTime.now(timeZoneId);
-        ZonedDateTime givenDateTime = currentDateTime.with(givenLocalTime);
+        long delaySeconds;
+        ZonedDateTime currentDateTime;
+        ZonedDateTime givenDateTime;
+        try {
+            // Get current and given time
+            LocalTime givenLocalTime = LocalTime.parse(givenTime.toUpperCase(), formatter);
+            currentDateTime = ZonedDateTime.now(timeZoneId);
+            givenDateTime = currentDateTime.with(givenLocalTime);
 
-        // If the given time is already passed today, move to the next day
-        if (givenDateTime.isBefore(currentDateTime)) {
-            givenDateTime = givenDateTime.plusDays(1);
+            // If the given time is already passed today, move to the next day
+            if (givenDateTime.isBefore(currentDateTime)) {
+                givenDateTime = givenDateTime.plusDays(1);
+            }
+
+            // Schedule a task to run after the calculated delay
+            delaySeconds = Duration.between(currentDateTime, givenDateTime).toSeconds();
+        } catch (Exception e){
+            player.sendMessage("Error processing the time. Did you use the correct format? Ex. 11:34pm");
+            throw new RuntimeException(e);
         }
-
-        // Schedule a task to run after the calculated delay
-        long delaySeconds = Duration.between(currentDateTime, givenDateTime).toSeconds();
-
         BukkitTask newTask;
 
         String name = player.getName();
@@ -70,8 +77,8 @@ public class KickSchedule {
         }, delaySeconds * 20);
 
         String formattedTime = convertTime(delaySeconds);
-        if (ban) player.sendMessage("You will be temp banned (for " + banTime + ") in " + formattedTime);
-        else player.sendMessage("You will be kicked in " + formattedTime);
+        if (ban) player.sendMessage("You will be temp banned (for " + banTime + ") in " + formattedTime +". Use /banme r to undo");
+        else player.sendMessage("You will be kicked in " + formattedTime +". Use /kickme r to undo");
         Bukkit.getLogger().info("Task scheduled at " + currentDateTime + " to be executed at " + givenDateTime + " (in " + delaySeconds + " seconds (" +formattedTime+ ") )");
 
         // New task will override old one, so cancel the old one
@@ -87,6 +94,8 @@ public class KickSchedule {
     }
 
     public static void removePlayer(String playerName) {
+        Bukkit.getPlayer(playerName).sendMessage("Removed auto kick/ban request");
+        scheduledTasks.get(playerName).cancel();
         scheduledTasks.remove(playerName);
     }
 
