@@ -1,20 +1,23 @@
 name: SelfControl
-version: '1.0'
+version: '1.1'
 main: cat6172.selfcontrol.SelfControl
-description: Kick yourself
+description: Kick/tempban yourself at a specified time
 author: Cat6172
 api-version: '1.20'
 
 commands:
-  addtokicklist:
-    description: Add yourself to the list of players kicked next specified time period
-    permission: all
-  kicklist:
-    description: View list of players to be kicked, kick them
-    permission: admin
-    usage: kicklist list to view, kicklist now to kick all
+  kickme:
+    description: Add/remove yourself to the list of players kicked at specified time
+    permission: selfcontrol.kick
+    usage: /kickme at [time, ie 1:34pm] (to add) or /kickme r (to remove)
+  banme:
+    description: Add/remove yourself to the list of players temp banned (1 hour) at specified time
+    permission: selfcontrol.ban
+    usage: /banme set [time, ie 1:34pm] or /banme r (to remove)
 permissions:
-  all:
+  selfcontrol.kick:
+    description: add self to auto kick list
     default: true
-  admin:
-    default: op
+  selfcontrol.ban:
+    description: add self to temp ban list
+    default: false
