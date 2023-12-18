@@ -1,5 +1,7 @@
 package cat6172.selfcontrol;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -19,6 +21,10 @@ public class KickSchedule {
     private static HashMap<String, BukkitTask> scheduledTasks;
     private static BukkitScheduler scheduler;
 
+    private static TextComponent kickMessage;
+    private static String banMessage;
+
+
     public static void initialize() {
         scheduler = Bukkit.getScheduler();
         scheduledTasks = new HashMap<>();
@@ -28,6 +34,8 @@ public class KickSchedule {
                 .toFormatter(Locale.ENGLISH)
                 .withResolverStyle(ResolverStyle.SMART);
         timeZoneId = ZoneId.of("America/Edmonton"); //TODO make configurable
+        kickMessage = Component.text("As you wish"); //TODO make configurable
+        banMessage = "As you wish. Don't ask the mods to unban you pls"; //TODO make configurable
     }
 
     public static void addInstance(Player player, String givenTime, boolean ban) {
@@ -50,16 +58,19 @@ public class KickSchedule {
 
         if (ban) newTask = scheduler.runTaskLater(SelfControl.getPlugin(SelfControl.class), () -> {
             Bukkit.getLogger().info("Executing tempban of " + name + " scheduled on " + currentDateTime + "(" + delaySeconds + " seconds ago)");
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tempban " + name + " 1h");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tempban " + name + " 1h " + banMessage);
             scheduledTasks.remove(name);
         }, delaySeconds * 20);
         else newTask = scheduler.runTaskLater(SelfControl.getPlugin(SelfControl.class), () -> {
             Bukkit.getLogger().info("Executing kick of " + name + " scheduled on " + currentDateTime + "(" + delaySeconds + " seconds ago)");
-            player.kick();
+            player.kick(kickMessage);
             scheduledTasks.remove(name);
         }, delaySeconds * 20);
 
-        Bukkit.getLogger().info("Task scheduled at " + currentDateTime + " to be executed at " + givenDateTime + " (in " + delaySeconds + " seconds)");
+        String formattedTime = convertTime(delaySeconds);
+        if (ban) player.sendMessage("You will be temp banned (for 1 hour) in " + formattedTime);
+        else player.sendMessage("You will be kicked in " + formattedTime);
+        Bukkit.getLogger().info("Task scheduled at " + currentDateTime + " to be executed at " + givenDateTime + " (in " + delaySeconds + " seconds (" +formattedTime+ ") )");
 
         // New task will override old one, so cancel the old one
         BukkitTask existingTask = scheduledTasks.get(name);
@@ -75,5 +86,31 @@ public class KickSchedule {
 
     public static void removePlayer(String playerName) {
         scheduledTasks.remove(playerName);
+    }
+
+    private static String convertTime(long timeInSeconds) {
+        if (timeInSeconds < 0) {
+            return "Invalid time";
+        }
+
+        long hours = timeInSeconds / 3600;
+        long minutes = (timeInSeconds % 3600) / 60;
+        long seconds = timeInSeconds % 60;
+
+        StringBuilder formattedTime = new StringBuilder();
+
+        if (hours > 0) {
+            formattedTime.append(hours).append("h ");
+        }
+
+        if (minutes > 0) {
+            formattedTime.append(minutes).append("m ");
+        }
+
+        if (seconds > 0 || (hours == 0 && minutes == 0)) {
+            formattedTime.append(seconds).append("s");
+        }
+
+        return formattedTime.toString();
     }
 }

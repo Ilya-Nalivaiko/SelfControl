@@ -12,9 +12,9 @@ public class CommandSelf implements CommandExecutor {
 
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player){
-            if (args[0].equals("set")){
-                KickSchedule.addInstance((Player)sender, args[1], label.equals("autoban"));
-            } else if (args[0].equals("remove")) {
+            if (args[0].equals("at")){
+                KickSchedule.addInstance((Player)sender, args[1], label.equals("banme"));
+            } else if (args[0].equals("r")) {
                 KickSchedule.removePlayer(sender.getName());
             } else return false;
         } else {

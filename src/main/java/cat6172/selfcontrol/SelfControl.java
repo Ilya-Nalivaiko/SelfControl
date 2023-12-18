@@ -9,8 +9,8 @@ public class SelfControl extends JavaPlugin implements CommandExecutor {
     public void onEnable() {
         try {
             Bukkit.getLogger().info("Initializing commands");
-            getCommand("autokick").setExecutor(new CommandSelf());
-            getCommand("autoban").setExecutor(new CommandSelf());
+            getCommand("kickme").setExecutor(new CommandSelf());
+            getCommand("banme").setExecutor(new CommandSelf());
             Bukkit.getLogger().info("Initializing task scheduler");
             KickSchedule.initialize();
         } catch (Exception e) {
