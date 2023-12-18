@@ -1,0 +1,11 @@
+#message given to player when the auto kick/ban request is executed
+kickMessage: "As you wish."
+banMessage: "As you wish. Please don't ask the mods to unban you :)"
+
+#standard time to be temp banned for
+banTime: "1h"
+
+#See standard timezone / time format before modifying
+timeZone: "America/Edmonton"
+timeFormat: "h:mma"
+

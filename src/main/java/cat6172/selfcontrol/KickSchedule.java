@@ -23,19 +23,21 @@ public class KickSchedule {
 
     private static TextComponent kickMessage;
     private static String banMessage;
+    private static String banTime;
 
 
-    public static void initialize() {
+    public static void initialize(String kickMsg, String banMsg, String banT, String timeZone, String timeForm) {
         scheduler = Bukkit.getScheduler();
         scheduledTasks = new HashMap<>();
         formatter = new DateTimeFormatterBuilder()
                 .parseCaseInsensitive()
-                .appendPattern("h:mma") //TODO make configurable
+                .appendPattern(timeForm)
                 .toFormatter(Locale.ENGLISH)
                 .withResolverStyle(ResolverStyle.SMART);
-        timeZoneId = ZoneId.of("America/Edmonton"); //TODO make configurable
-        kickMessage = Component.text("As you wish"); //TODO make configurable
-        banMessage = "As you wish. Don't ask the mods to unban you pls"; //TODO make configurable
+        timeZoneId = ZoneId.of(timeZone);
+        kickMessage = Component.text(kickMsg);
+        banMessage = banMsg;
+        banTime = banT;
     }
 
     public static void addInstance(Player player, String givenTime, boolean ban) {
@@ -58,7 +60,7 @@ public class KickSchedule {
 
         if (ban) newTask = scheduler.runTaskLater(SelfControl.getPlugin(SelfControl.class), () -> {
             Bukkit.getLogger().info("Executing tempban of " + name + " scheduled on " + currentDateTime + "(" + delaySeconds + " seconds ago)");
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tempban " + name + " 1h " + banMessage);
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tempban " + name + " " + banTime + " " + banMessage);
             scheduledTasks.remove(name);
         }, delaySeconds * 20);
         else newTask = scheduler.runTaskLater(SelfControl.getPlugin(SelfControl.class), () -> {
@@ -68,7 +70,7 @@ public class KickSchedule {
         }, delaySeconds * 20);
 
         String formattedTime = convertTime(delaySeconds);
-        if (ban) player.sendMessage("You will be temp banned (for 1 hour) in " + formattedTime);
+        if (ban) player.sendMessage("You will be temp banned (for " + banTime + ") in " + formattedTime);
         else player.sendMessage("You will be kicked in " + formattedTime);
         Bukkit.getLogger().info("Task scheduled at " + currentDateTime + " to be executed at " + givenDateTime + " (in " + delaySeconds + " seconds (" +formattedTime+ ") )");
 
