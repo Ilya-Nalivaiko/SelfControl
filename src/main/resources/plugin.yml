@@ -1,9 +1,9 @@
 name: SelfControl
-version: '1.1'
+version: '1.1.1'
 main: cat6172.selfcontrol.SelfControl
 description: Kick/tempban yourself at a specified time
 author: Cat6172
-api-version: '1.20'
+api-version: '1.21'
 
 commands:
   kickme:
