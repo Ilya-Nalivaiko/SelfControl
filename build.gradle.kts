@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "org.example"
-version = "1.1.1"
+version = "1.1.1-1.21.1"
 
 repositories {
     mavenCentral()
@@ -11,8 +11,8 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
 }
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(17))}
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))}
